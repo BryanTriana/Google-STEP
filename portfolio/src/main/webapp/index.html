@@ -2,17 +2,83 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>My Portfolio</title>
+    <title>Bryan Triana - Projects</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"><script>
     <script src="script.js"></script>
+    <script>
+      //Load navigation bar using JQuery to avoid code duplication
+      $(function() {
+        $("#navbar").load("navbar.html");
+      });
+    </script>
   </head>
+  <header>
+    <div id="navbar"></div>
+  </header>
   <body>
-    <div id="content">
-      <h1>My Portfolio</h1>
-      <p>This is my portfolio.</p>
-      <p>Click here to get a random message:</p>
-      <button onclick="addRandomGreeting()">Hello</button>
-      <div id="greeting-container"></div>
+    <h2>Projects</h2>
+    <div class="wrapper">
+      <a class="box" target="_blank" rel="noopener noreferrer" href="https://github.com/InversePalindrome/Jibber-Jabber">
+        <img src="images/JibberJabber.jpg">
+        <h3>Jibber Jabber</h3>
+      </a>
+      <a class="box" target="_blank" rel="noopener noreferrer" href="https://github.com/InversePalindrome/SensorBox">
+        <img src="images/SensorBox.jpg">
+        <h3>Sensor Box</h3>
+      </a>
+      <a class="box" target="_blank" rel="noopener noreferrer" href="https://github.com/InversePalindrome/Apophis">
+        <img src="images/Apophis.jpg">
+        <h3>Apophis</h3>
+      </a>
+      <a class="box" target="_blank" rel="noopener noreferrer" href="https://github.com/InversePalindrome/Chatbots">
+        <img src="images/Chatbots.jpg">
+        <h3>Chatbots</h3>
+      </a>
+      <a class="box" target="_blank" rel="noopener noreferrer" href="https://github.com/InversePalindrome/Chess">
+        <img src="images/Chess.png">
+        <h3>Chess</h3>
+      </a>
+      <a class="box" target="_blank" rel="noopener noreferrer" href="https://github.com/InversePalindrome/Generative-Art">
+        <img src="images/GenerativeArt.png">
+        <h3>Generative Art</h3>
+      </a>
+      <a class="box" target="_blank" rel="noopener noreferrer" href="https://github.com/InversePalindrome/DossierLayout">
+        <img src="images/DossierLayout.png">
+        <h3>Dossier Layout</h3>
+      </a>
+      <a class="box" target="_blank" rel="noopener noreferrer" href="https://github.com/InversePalindrome/Rampancy">
+        <img src="images/Rampancy.png">
+        <h3>Rampancy</h3>
+      </a>
+      <a class="box" target="_blank" rel="noopener noreferrer" href="https://github.com/InversePalindrome/Nihil">
+        <img src="images/Nihil.png">
+        <h3>Nihil</h3>
+      </a>
+      <a class="box" target="_blank" rel="noopener noreferrer" href="https://github.com/InversePalindrome/InPal">
+        <img src="images/InPal.png">
+        <h3>InPal</h3>
+      </a>
+      <a class="box" target="_blank" rel="noopener noreferrer" href="https://github.com/InversePalindrome/Palindrome-Network">
+        <img src="images/PalindromeNetwork.png">
+        <h3>Palindrome Network</h3>
+      </a>
+      <a class="box" target="_blank" rel="noopener noreferrer" href="https://github.com/InversePalindrome/HeliosG2V">
+        <img src="images/HeliosG2V.jpg">
+        <h3>HeliosG2V</h3>
+      </a>
+      <a class="box" target="_blank" rel="noopener noreferrer" href="https://github.com/InversePalindrome/Memento-Mori">
+        <img src="images/MementoMori.png">
+        <h3>Memento Mori</h3>
+      </a>
+      <a class="box" target="_blank" rel="noopener noreferrer" href="https://github.com/InversePalindrome/Spacelapse">
+        <img src="images/Spacelapse.png">
+        <h3>Spacelapse</h3>
+      </a>
+      <a class="box" target="_blank" rel="noopener noreferrer" href="https://github.com/InversePalindrome/Variadic-Poker">
+      <img src="images/VariadicPoker.png">
+      <h3>Variadic Poker</h3>
+      </a>
     </div>
   </body>
 </html>
