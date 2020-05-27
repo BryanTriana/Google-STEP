@@ -24,13 +24,15 @@
       Generating a random string in C++ is a simple task that can be easily 
       achieved by the use of 
       <a target="_blank" rel="noopener noreferrer" 
-      href="https://en.cppreference.com/w/cpp/numeric/random/rand">rand()</a>; 
+      href="https://en.cppreference.com/w/cpp/numeric/random/rand">rand()
+      </a>; 
       however, this method is not recommended
       because rand() lacks a distribution engine and the quality of its implementation
       leaves more to be desired. To combat this issue,
       the C++ Standard Library provides a set of functions from the 
       <a target="_blank" rel="noopener noreferrer" 
-      href="https://en.cppreference.com/w/cpp/header/random">Random</a>
+      href="https://en.cppreference.com/w/cpp/header/random">Random
+      </a>
       header that allows users to generate random numbers from well-defined
       engines and distributions. The implementation of the function that generates a 
       random string will make use of three key features present 
@@ -41,24 +43,31 @@
       <li>
         <a target="_blank" rel="noopener noreferrer" 
         href="https://en.cppreference.com/w/cpp/numeric/random/random_device">
-        std::random_device</a>:
-        uniformly distributed random number generator.</li>
+        std::random_device
+        </a>
+        :uniformly distributed random number generator.
+      </li>
       <li>
         <a target="_blank" rel="noopener noreferrer" 
         href="https://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine">
         std::mt19937</a>:
         random number engine based on the 
         <a href="https://en.wikipedia.org/wiki/Mersenne_Twister">
-        Mersenne Twister</a> algorithm.</li>
+        Mersenne Twister
+        </a>
+        algorithm.
+      </li>
       <li>
         <a target="_blank" rel="noopener noreferrer" 
         href="https://en.cppreference.com/w/cpp/numeric/random/uniform_int_distribution">
-        std::uniform_int_distribution</a>
-        : distribution for random integer values between two bounds in a closed interval.</li>
+        std::uniform_int_distribution
+        </a>
+        : distribution for random integer values between two bounds in a closed interval.
+      </li>
     </ul>
     <p>
       The implementation for the random string generator combining all
-       these features together is shown below:
+      these features together is shown below:
     </p> 
     <pre>
       <code>
@@ -98,7 +107,8 @@
     </p>
     <h5>
       <a a target="_blank" rel="noopener noreferrer" 
-      href="https://github.com/InversePalindrome/Blog/tree/master/RandomString">Source Code</a>
+      href="https://github.com/InversePalindrome/Blog/tree/master/RandomString">Source Code
+      </a>
     </h5>
     <div id="post-comment"></div>
   </body>
