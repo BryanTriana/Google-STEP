@@ -1,9 +1,38 @@
-#content {
-  margin-left: auto;
-  margin-right: auto;
-  width: 650px;
+header {
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
 }
 
-#greeting-container {
-  margin-top: 20px;
+header li {
+  margin: 20px;
+}
+
+header li a {
+  color: black;
+  text-decoration: none;
+}
+
+header * {
+  display: inline;
+}
+
+body {
+  padding: 30px;
+  margin-top: 50px;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: 600px 600px 600px;
+  grid-gap: 10px;
+}
+
+.box {
+    padding: 20px;
+    color: black;
+    text-decoration: none;
+    text-align: center;
 }
