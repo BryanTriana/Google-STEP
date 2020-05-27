@@ -17,7 +17,7 @@ header li a {
 }
 
 header li a.active {
-    color: blue;
+  color: blue;
 }
 
 header * {
@@ -30,7 +30,7 @@ body {
 }
 
 p {
-    max-width: 500px;
+  max-width: 500px;
 }
 
 .wrapper {
@@ -40,8 +40,8 @@ p {
 }
 
 .box {
-    padding: 20px;
-    color: black;
-    text-decoration: none;
-    text-align: center;
+  padding: 20px;
+  color: black;
+  text-decoration: none;
+  text-align: center;
 }
