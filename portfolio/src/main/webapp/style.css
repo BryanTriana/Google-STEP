@@ -17,7 +17,7 @@ header li a {
 }
 
 header li a.active {
-  color: blue;
+  color: gray;
 }
 
 header * {
@@ -31,6 +31,10 @@ body {
 
 p {
   max-width: 500px;
+}
+
+script {
+  color: transparent;
 }
 
 .wrapper {
