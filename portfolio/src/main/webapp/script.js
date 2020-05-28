@@ -17,8 +17,7 @@ function loadSelector(selectorID, filename) {
  * if its children anchor links have the same 'href' attribute
  */
 function highlightActivePage() {
-    const navBar = document.getElementsByTagName('nav');
-    const links = navbar.getElementsByTagName('a');
+    const links = $('nav a');
 
     for(let i = 0; i < links.length; ++i) {
         if(links[i].href === window.location.href) {
