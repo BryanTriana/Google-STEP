@@ -4,21 +4,17 @@
     <meta charset="UTF-8">
     <title>Bryan Triana - Blog</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"><script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="script.js"></script>
     <script>
-      // Load navigation bar and post-comment selectors using JQuery to avoid code duplication
-      $(function() {
-        $("#navbar").load("navbar.html");
-        $("#post-comment").load("post-comment.html");
-      });
+      loadSelector("navbar", "navbar.html");
+      loadSelector("post-comment", "post-comment.html");
     </script>
   </head>
   <header>
     <div id="navbar"></div>
   </header>
   <body>
-    <h2>Blog</h2>
     <h3>How to Create a Random String in C++</h3>
     <p>
       Generating a random string in C++ is a simple task that can be easily 

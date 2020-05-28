@@ -4,20 +4,16 @@
     <meta charset="UTF-8">
     <title>Bryan Triana - Contact</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"><script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="script.js"></script>
     <script>
-      // Load navigation bar using JQuery to avoid code duplication
-      $(function() {
-        $("#navbar").load("navbar.html");
-      });
+      loadSelector("navbar", "navbar.html");
     </script>
   </head>
   <header>
     <div id="navbar"></div>
   </header>
   <body>
-   <h2>Contact</h2>
    <p>Let's get together!</p>
    <form>
     <label for="first-name-entry">First Name:</label><br>
