@@ -1,28 +1,30 @@
-// Copyright 2019 Google LLC
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     https://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+/**
+ * Loads a selector from another HTML file so that it can be used in the current DOM
+ *
+ * @param { string } selector - Selector that will be used across the document to refer to the HTML element
+ * @param { string } filename - Filename of HTML file that is used to load the element
+ *
+ * @example loadSelector("#navbar", "navbar.html")
+ */
+function loadSelector(selector, filename) {
+    $(document).ready(function() {
+        $(selector).load(filename);
+    });
+}
 
 /**
- * Adds a random greeting to the page.
+ * Highlights the current active link on the navigation bar by finding the 'nav' tag and then searching
+ * if its children anchor links have the same 'href' attribute
  */
-function addRandomGreeting() {
-  const greetings =
-      ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
+function highlightActivePage() {
+    $(document).ready(function() {
+        const links = $('nav a');
 
-  // Pick a random greeting.
-  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
-
-  // Add it to the page.
-  const greetingContainer = document.getElementById('greeting-container');
-  greetingContainer.innerText = greeting;
+        for (let i = 0; i < links.length; ++i) {
+            if (links[i].href === window.location.href) {
+                links[i].classList.add('active');
+                return;
+            }
+        }
+    });
 }

@@ -1,47 +1,21 @@
-header {
-  top: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  align-items: center;
+a {
+  color: dimgray;
+  text-decoration: none;
 }
 
-header li {
-  margin: 20px;
-  font-size: 20px;
-}
-
-header li a {
+a:hover {
   color: black;
   text-decoration: none;
 }
 
-header li a.active {
-  color: blue;
+.navbar {
+  margin-bottom: 20px;
 }
 
-header * {
-  display: inline;
+.col * {
+  margin-top: 10px;
 }
 
-body {
-  padding: 30px;
-  margin-top: 50px;
-}
-
-p {
-  max-width: 500px;
-}
-
-.wrapper {
-  display: grid;
-  grid-template-columns: 600px 600px 600px;
-  grid-gap: 10px;
-}
-
-.box {
-  padding: 20px;
-  color: black;
-  text-decoration: none;
-  text-align: center;
+.top-buffer {
+  margin-top: 40px;
 }
