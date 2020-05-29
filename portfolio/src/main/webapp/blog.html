@@ -22,15 +22,19 @@
       <p>
         Generating a random string in C++ is a simple task that can be easily 
         achieved by the use of 
-        <a target="_blank" rel="noopener noreferrer" 
-        href="https://en.cppreference.com/w/cpp/numeric/random/rand">rand()
+        <a 
+            target="_blank" rel="noopener noreferrer" 
+            href="https://en.cppreference.com/w/cpp/numeric/random/rand">
+            rand()
         </a>; 
         however, this method is not recommended
         because rand() lacks a distribution engine and the quality of its implementation
         leaves more to be desired. To combat this issue,
         the C++ Standard Library provides a set of functions from the 
-        <a target="_blank" rel="noopener noreferrer" 
-        href="https://en.cppreference.com/w/cpp/header/random">Random
+        <a 
+            target="_blank" rel="noopener noreferrer" 
+            href="https://en.cppreference.com/w/cpp/header/random">
+            Random
         </a>
         header that allows users to generate random numbers from well-defined
         engines and distributions. The implementation of the function that generates a 
@@ -40,26 +44,30 @@
       <p>The elements used being:</p>
       <ul>
         <li>
-          <a target="_blank" rel="noopener noreferrer" 
-          href="https://en.cppreference.com/w/cpp/numeric/random/random_device">
-          std::random_device
+          <a 
+              target="_blank" rel="noopener noreferrer" 
+              href="https://en.cppreference.com/w/cpp/numeric/random/random_device">
+              std::random_device
           </a>
           :uniformly distributed random number generator.
         </li>
         <li>
-          <a target="_blank" rel="noopener noreferrer" 
-          href="https://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine">
-          std::mt19937</a>:
+          <a 
+              target="_blank" rel="noopener noreferrer" 
+              href="https://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine">
+              std::mt19937
+          </a>:
           random number engine based on the 
           <a href="https://en.wikipedia.org/wiki/Mersenne_Twister">
-          Mersenne Twister
+              Mersenne Twister
           </a>
           algorithm.
         </li>
         <li>
-          <a target="_blank" rel="noopener noreferrer" 
-          href="https://en.cppreference.com/w/cpp/numeric/random/uniform_int_distribution">
-          std::uniform_int_distribution
+          <a 
+              target="_blank" rel="noopener noreferrer" 
+              href="https://en.cppreference.com/w/cpp/numeric/random/uniform_int_distribution">
+              std::uniform_int_distribution
           </a>
           : distribution for random integer values between two bounds in a closed interval.
         </li>
@@ -105,8 +113,10 @@
         provided in the Random header that were included in the C++11 Standard Library.
       </p>
       <h4>
-        <a a target="_blank" rel="noopener noreferrer" 
-        href="https://github.com/InversePalindrome/Blog/tree/master/RandomString">Source Code
+        <a
+            target="_blank" rel="noopener noreferrer" 
+            href="https://github.com/InversePalindrome/Blog/tree/master/RandomString">
+            Source Code
         </a>
       </h4>
       <div class="top-buffer" id="post-comment"></div>
