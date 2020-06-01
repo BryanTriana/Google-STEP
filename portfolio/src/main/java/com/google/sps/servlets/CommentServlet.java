@@ -8,14 +8,14 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * Stores and fetches comment submission requests
-*/
+ */
 @WebServlet("/comment-data")
 public class CommentServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request,
-     HttpServletResponse response) throws IOException {
-        response.setContentType("text/html;");
-        response.getWriter().println("<h1>Hello " + 
-          request.getParameter("name") + "!</h1>");
+        HttpServletResponse response) throws IOException {
+            response.setContentType("text/html;");
+            response.getWriter().println("<h1>Hello " + 
+                request.getParameter("name") + "!</h1>");
     }
 }
