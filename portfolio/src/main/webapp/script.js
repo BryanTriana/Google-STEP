@@ -1,5 +1,5 @@
 /**
- * Loads a selector from another HTML file so that it can be used in the current DOM
+ * Loads a selector from another HTML file so that it can be used in the current DOM.
  *
  * @param { string } selector - Selector that will be used across the document to refer to the HTML element
  * @param { string } filename - Filename of HTML file that is used to load the element
@@ -14,7 +14,7 @@ function loadSelector(selector, filename) {
 
 /**
  * Highlights the current active link on the navigation bar by finding the 'nav' tag and then searching
- * if its children anchor links have the same 'href' attribute
+ * if its children anchor links have the same 'href' attribute.
  */
 function highlightActivePage() {
     $(document).ready(function() {
@@ -30,7 +30,7 @@ function highlightActivePage() {
 }
 
 /**
- * Fetches comments from CommentServlet and adds them to the comment section in the DOM
+ * Fetches comments from CommentServlet and adds them to the comment section in the DOM.
  */
 function getComments() {
     fetch('/comment-data').then(response => response.json()).then((comments) => {
@@ -44,7 +44,7 @@ function getComments() {
 
 /**
  * Creates a list element that displays information about the name and the message
- * of a comment
+ * of a comment.
  * 
  * @param { string } name - The name of the person posting the comment
  * @param { string } message - The message included in the comment
