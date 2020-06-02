@@ -1,13 +1,13 @@
 <div>
   <h3>Post a comment:</h3>
-  <form action="/comment-data">
+  <form method="POST" action="/comment-data">
     <div class="form-group">
       <label for="name-entry">Name:</label>
       <input class="form-control" type="text" name="name" id="name-entry" required>
     </div>
     <div class="form-group">
-      <label for="comment-entry">Comment:</label>
-      <textarea class="form-control" type="text" name="comment" id="comment-entry" rows="5" required></textarea>
+      <label for="message-entry">Message:</label>
+      <textarea class="form-control" type="text" name="message" id="message-entry" rows="5" required></textarea>
     </div>
     <button class="btn btn-dark" type="submit">Post Comment</button>
   </form>
