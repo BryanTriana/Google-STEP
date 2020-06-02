@@ -15,7 +15,7 @@
     </script>
     <title>Bryan Triana - Blog</title>
   </head>
-  <body>
+  <body onload="getComments()">
     <div id="navbar"></div>
     <div class="container">
       <h3>How to Create a Random String in C++</h3>
@@ -120,6 +120,11 @@
         </a>
       </h4>
       <div class="top-buffer" id="post-comment"></div>
+      <div class="top-buffer">
+        <h3>Comments:</h3>
+        <ul id="comments-container">
+        </ul>
       </div>
+    </div>
   </body>
 </html>
