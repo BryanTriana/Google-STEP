@@ -1,7 +1,7 @@
 package com.google.sps.data;
 
 /**
- * Holds relevant information for comments stored on the server
+ * Holds relevant information for comments stored on the server.
  */
 public class Comment {
     private final String name;
