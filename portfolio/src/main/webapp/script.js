@@ -28,3 +28,32 @@ function highlightActivePage() {
         }
     });
 }
+
+/**
+ * Fetches comments from CommentServlet and adds them to the comment section in the DOM
+ */
+function getComments() {
+    fetch('/comment-data').then(response => response.json()).then((comments) => {
+        const commentsContainer = $('#comments-container');
+        
+        for(comment of comments) {
+            commentsContainer.append(createComment(comment.name, comment.message));
+        };
+    });
+}
+
+/**
+ * Creates a list element that displays information about the name and the message
+ * of a comment
+ * 
+ * @param { string } name - The name of the person posting the comment
+ * @param { string } message - The message included in the comment
+ * @returns { jQuery } The jQuery object that holds a list element representing a comment
+ */
+function createComment(name, message) {
+    const commentElem = $('<li></li>');
+    commentElem.append($('<h3>' + name + '</h3>'));
+    commentElem.append($('<p>' + message + '</p>'));
+
+    return commentElem;
+}
