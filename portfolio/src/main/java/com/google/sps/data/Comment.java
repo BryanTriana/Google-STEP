@@ -4,14 +4,14 @@ package com.google.sps.data;
  * Holds relevant information for comments stored on the server
  */
 public class Comment {
-    private String name;
-    private String message;
-    private long timestamp;
+    private final String name;
+    private final String message;
+    private final long timestampMillis;
 
-    public Comment(String name, String message, long timestamp) {
+    public Comment(String name, String message, long timestampMillis) {
         this.name = name;
         this.message = message;
-        this.timestamp = timestamp;
+        this.timestampMillis = timestampMillis;
     }
 
     public String getName() {
@@ -22,7 +22,7 @@ public class Comment {
         return message;
     }
 
-    public long getTimestamp() {
-        return timestamp;
+    public long getTimestampMillis() {
+        return timestampMillis;
     }
 }
