@@ -5,6 +5,8 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Transaction;
+import com.google.appengine.api.datastore.TransactionOptions;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,13 +20,24 @@ import javax.servlet.http.HttpServletResponse;
 public class DeleteCommentServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Query query = new Query(CommentServletKeys.COMMENT_KIND);
-
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+    Query query = new Query(CommentServletKeys.COMMENT_KIND);
     PreparedQuery queryResults = datastore.prepare(query);
 
-    for (Entity commentEntity : queryResults.asIterable()) {
-      datastore.delete(commentEntity.getKey());
+    TransactionOptions options = TransactionOptions.Builder.withXG(true);
+    Transaction transaction = datastore.beginTransaction(options);
+
+    try {
+      for (Entity commentEntity : queryResults.asIterable()) {
+        datastore.delete(transaction, commentEntity.getKey());
+      }
+
+      transaction.commit();
+    } finally {
+      if (transaction.isActive()) {
+        transaction.rollback();
+      }
     }
 
     response.sendRedirect("/blog.html");
