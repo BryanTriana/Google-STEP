@@ -45,7 +45,13 @@ function getComments() {
       commentsContainer.empty();
 
       for (comment of comments) {
-        commentsContainer.append(createComment(comment.name, comment.message));
+        commentsContainer.append(
+          createComment(
+            comment.name,
+            comment.message,
+            moment(comment.timestampMillis).format("MMMM Do YYYY, h:mm:ss a")
+          )
+        );
       }
     });
 }
@@ -55,13 +61,15 @@ function getComments() {
  * message of a comment.
  *
  * @param { string } name - The name of the person posting the comment
- * @param { string } message - The message included in the comment
+ * @param { string } message - The message included in the
+ * @param { string } date - The date the comment was sent
  * @returns { jQuery } The jQuery object that holds a list element representing
  *     a comment
  */
-function createComment(name, message) {
+function createComment(name, message, date) {
   const commentElem = $('<li class="list-group-item"></li>');
   commentElem.append($("<h3>" + name + "</h3>"));
+  commentElem.append($('<p class="text-secondary">' + date + "</p>"));
   commentElem.append($("<p>" + message + "</p>"));
 
   return commentElem;
