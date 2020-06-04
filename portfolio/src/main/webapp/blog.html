@@ -1,10 +1,16 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -20,62 +26,71 @@
     <div class="container">
       <h3>How to Create a Random String in C++</h3>
       <p>
-        Generating a random string in C++ is a simple task that can be easily 
-        achieved by the use of 
-        <a 
-            target="_blank" rel="noopener noreferrer" 
-            href="https://en.cppreference.com/w/cpp/numeric/random/rand">
-            rand()
-        </a>; 
-        however, this method is not recommended
-        because rand() lacks a distribution engine and the quality of its implementation
-        leaves more to be desired. To combat this issue,
-        the C++ Standard Library provides a set of functions from the 
-        <a 
-            target="_blank" rel="noopener noreferrer" 
-            href="https://en.cppreference.com/w/cpp/header/random">
-            Random
+        Generating a random string in C++ is a simple task that can be easily
+        achieved by the use of
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://en.cppreference.com/w/cpp/numeric/random/rand"
+        >
+          rand() </a
+        >; however, this method is not recommended because rand() lacks a
+        distribution engine and the quality of its implementation leaves more to
+        be desired. To combat this issue, the C++ Standard Library provides a
+        set of functions from the
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://en.cppreference.com/w/cpp/header/random"
+        >
+          Random
         </a>
         header that allows users to generate random numbers from well-defined
-        engines and distributions. The implementation of the function that generates a 
-        random string will make use of three key features present 
-        in the facilities of the Random header.
+        engines and distributions. The implementation of the function that
+        generates a random string will make use of three key features present in
+        the facilities of the Random header.
       </p>
       <p>The elements used being:</p>
       <ul>
         <li>
-          <a 
-              target="_blank" rel="noopener noreferrer" 
-              href="https://en.cppreference.com/w/cpp/numeric/random/random_device">
-              std::random_device
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://en.cppreference.com/w/cpp/numeric/random/random_device"
+          >
+            std::random_device
           </a>
           :uniformly distributed random number generator.
         </li>
         <li>
-          <a 
-              target="_blank" rel="noopener noreferrer" 
-              href="https://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine">
-              std::mt19937
-          </a>:
-          random number engine based on the 
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine"
+          >
+            std::mt19937 </a
+          >: random number engine based on the
           <a href="https://en.wikipedia.org/wiki/Mersenne_Twister">
-              Mersenne Twister
+            Mersenne Twister
           </a>
           algorithm.
         </li>
         <li>
-          <a 
-              target="_blank" rel="noopener noreferrer" 
-              href="https://en.cppreference.com/w/cpp/numeric/random/uniform_int_distribution">
-              std::uniform_int_distribution
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://en.cppreference.com/w/cpp/numeric/random/uniform_int_distribution"
+          >
+            std::uniform_int_distribution
           </a>
-          : distribution for random integer values between two bounds in a closed interval.
+          : distribution for random integer values between two bounds in a
+          closed interval.
         </li>
       </ul>
       <p>
-        The implementation for the random string generator combining all
-        these features together is shown below:
-      </p> 
+        The implementation for the random string generator combining all these
+        features together is shown below:
+      </p>
       <pre>
         <code>
     std::string random_string(std::size_t length)
@@ -98,32 +113,53 @@
         </code>
       </pre>
       <p>
-        As you can see, this function hard codes all the possible characters that 
-        will be used to form the random string. Then, it initializes the
-        three needed objects from the Random header by creating a Mersenne 
+        As you can see, this function hard codes all the possible characters
+        that will be used to form the random string. Then, it initializes the
+        three needed objects from the Random header by creating a Mersenne
         Twister engine and a distribution that covers all indexes from the
-        possible characters string. Ultimately, it iterates through the 
-        arbitrary length given as a parameter to populate the string with a random
-        character in every iteration.
+        possible characters string. Ultimately, it iterates through the
+        arbitrary length given as a parameter to populate the string with a
+        random character in every iteration.
       </p>
       <h3>Conclusion</h3>
       <p>
-        Avoiding the use of rand() is a piece of advice that does not only apply to
-        create random strings. Instead, it is recommended to use the facilities
-        provided in the Random header that were included in the C++11 Standard Library.
+        Avoiding the use of rand() is a piece of advice that does not only apply
+        to create random strings. Instead, it is recommended to use the
+        facilities provided in the Random header that were included in the C++11
+        Standard Library.
       </p>
       <h4>
         <a
-            target="_blank" rel="noopener noreferrer" 
-            href="https://github.com/InversePalindrome/Blog/tree/master/RandomString">
-            Source Code
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://github.com/InversePalindrome/Blog/tree/master/RandomString"
+        >
+          Source Code
         </a>
       </h4>
       <div class="top-buffer" id="post-comment"></div>
       <div class="top-buffer">
         <h3>Comments:</h3>
-        <ul id="comments-container">
-        </ul>
+        <div class="form-group">
+          <label for="comment-limit"
+            >Select number of comments to display:</label
+          >
+          <select
+            class="form-control"
+            id="comment-limit"
+            name="comment-limit"
+            onchange="getComments()"
+          >
+            <option value="1">1</option>
+            <option value="3">3</option>
+            <option value="5" selected>5</option>
+            <option value="10">10</option>
+          </select>
+        </div>
+        <form method="POST" action="/delete-comment-data">
+          <button class="btn btn-dark" type="submit">Delete Comments</button>
+        </form>
+        <ul class="list-group top-buffer" id="comments-container"></ul>
       </div>
     </div>
   </body>
