@@ -1,10 +1,16 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -18,26 +24,56 @@
     <div id="navbar"></div>
     <div class="container">
       <h4>Let's get together!</h4>
-      <form>
+      <form action="/contact-data">
         <div class="form-group">
           <label for="first-name-entry">First Name:</label>
-          <input class="form-control" type="text" name="first-name" id="first-name-entry" required>
+          <input
+            class="form-control"
+            type="text"
+            name="first-name"
+            id="first-name-entry"
+            required
+          />
         </div>
         <div class="form-group">
           <label for="last-name-entry">Last Name:</label>
-          <input class="form-control" type="text" name="last-name" id="last-name-entry" required>
+          <input
+            class="form-control"
+            type="text"
+            name="last-name"
+            id="last-name-entry"
+            required
+          />
         </div>
         <div class="form-group">
-        <label for="email-entry">Email:</label>
-        <input class="form-control" type="email" name="email" id="email-entry" required>
+          <label for="email-entry">Email:</label>
+          <input
+            class="form-control"
+            type="email"
+            name="email"
+            id="email-entry"
+            required
+          />
         </div>
         <div class="form-group">
           <label for="title-entry">Title:</label>
-          <input class="form-control" type="text" name="title" id="title-entry">
+          <input
+            class="form-control"
+            type="text"
+            name="title"
+            id="title-entry"
+          />
         </div>
         <div class="form-group">
           <label for="message-entry">Message:</label>
-          <textarea class="form-control" type="text" name="message" id="message-entry" required></textarea>
+          <textarea
+            class="form-control"
+            type="text"
+            name="message"
+            id="message-entry"
+            rows="10"
+            required
+          ></textarea>
         </div>
         <button class="btn btn-dark" type="submit">Submit</button>
       </form>
