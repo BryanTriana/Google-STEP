@@ -10,7 +10,7 @@
  * @example loadSelector("#navbar", "navbar.html")
  */
 function loadSelector(selector, filename) {
-  $(document).ready(function() {
+  $(document).ready(function () {
     $(selector).load(filename);
   });
 }
@@ -21,12 +21,12 @@ function loadSelector(selector, filename) {
  * attribute.
  */
 function highlightActivePage() {
-  $(document).ready(function() {
-    const links = $('nav a');
+  $(document).ready(function () {
+    const links = $("nav a");
 
     for (let i = 0; i < links.length; ++i) {
       if (links[i].href === window.location.href) {
-        links[i].classList.add('active');
+        links[i].classList.add("active");
         return;
       }
     }
@@ -38,17 +38,16 @@ function highlightActivePage() {
  * the DOM.
  */
 function getComments() {
-  fetch('/comment-data?commentLimit=' + $('#comment-limit').val())
-      .then(response => response.json())
-      .then((comments) => {
-        const commentsContainer = $('#comments-container');
-        commentsContainer.empty();
+  fetch("/comment-data?commentLimit=" + $("#comment-limit").val())
+    .then((response) => response.json())
+    .then((comments) => {
+      const commentsContainer = $("#comments-container");
+      commentsContainer.empty();
 
-        for (comment of comments) {
-          commentsContainer.append(
-              createComment(comment.name, comment.message));
-        };
-      });
+      for (comment of comments) {
+        commentsContainer.append(createComment(comment.name, comment.message));
+      }
+    });
 }
 
 /**
@@ -62,8 +61,8 @@ function getComments() {
  */
 function createComment(name, message) {
   const commentElem = $('<li class="list-group-item"></li>');
-  commentElem.append($('<h3>' + name + '</h3>'));
-  commentElem.append($('<p>' + message + '</p>'));
+  commentElem.append($("<h3>" + name + "</h3>"));
+  commentElem.append($("<p>" + message + "</p>"));
 
   return commentElem;
 }

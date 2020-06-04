@@ -28,8 +28,9 @@ public class CommentServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     int commentLimit = getCommentLimit(request);
 
-    Query query = new Query(CommentServletKeys.COMMENT_KIND)
-                      .addSort(CommentServletKeys.TIMESTAMP_MILLIS_PROPERTY, SortDirection.DESCENDING);
+    Query query =
+        new Query(CommentServletKeys.COMMENT_KIND)
+            .addSort(CommentServletKeys.TIMESTAMP_MILLIS_PROPERTY, SortDirection.DESCENDING);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery queryResults = datastore.prepare(query);
@@ -40,7 +41,8 @@ public class CommentServlet extends HttpServlet {
         queryResults.asIterable(FetchOptions.Builder.withLimit(commentLimit))) {
       String name = (String) commentEntity.getProperty(CommentServletKeys.NAME_PROPERTY);
       String message = (String) commentEntity.getProperty(CommentServletKeys.MESSAGE_PROPERTY);
-      long timestampMillis = (long) commentEntity.getProperty(CommentServletKeys.TIMESTAMP_MILLIS_PROPERTY);
+      long timestampMillis =
+          (long) commentEntity.getProperty(CommentServletKeys.TIMESTAMP_MILLIS_PROPERTY);
 
       comments.add(new Comment(name, message, timestampMillis));
     }
