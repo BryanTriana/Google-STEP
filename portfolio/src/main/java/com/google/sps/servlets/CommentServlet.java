@@ -71,9 +71,9 @@ public class CommentServlet extends HttpServlet {
   /**
    * Retrieves the comment limit parameter from an HTTP request and checks if its valid.
    *
-   * @param request - The HTTP request that holds the comment limit parameter
-   * @return - The integer value for the comments limit, if the value found is invalid then
-   *           it returns a default value
+   * @param request The HTTP request that holds the comment limit parameter
+   * @return The integer value for the comments limit, if the value found is invalid then
+   *         it returns a default value
    */
   private static int getCommentLimit(HttpServletRequest request) {
     String commentLimitString = request.getParameter(CommentServletKeys.COMMENT_LIMIT_PROPERTY);
