@@ -41,7 +41,7 @@ public class ContactServlet extends HttpServlet {
 
     PrintWriter printWriter = response.getWriter();
 
-    if (!validateInputFields(printWriter, firstName, lastName, senderEmail, title, message)) {
+    if (!areInputFieldsValid(printWriter, firstName, lastName, senderEmail, title, message)) {
       return;
     }
 
@@ -77,14 +77,14 @@ public class ContactServlet extends HttpServlet {
    *
    * @param printWriter - the PrintWriter used to print output to the user explaining the possible
    *     validation mistakes
-   * @param firstName - First name field given by the HTTP request
-   * @param lastName - Last name field given by the HTTP request
-   * @param email - Email field given by the HTTP request
-   * @param title - Title field given by the HTTP request
-   * @param message - Message field given by the HTTP request
+   * @param firstName First name field given by the HTTP request
+   * @param lastName Last name field given by the HTTP request
+   * @param email Email field given by the HTTP request
+   * @param title Title field given by the HTTP request
+   * @param message Message field given by the HTTP request
    * @return boolean value that is true if all the input fields are valid, otherwise false
    */
-  private static boolean validateInputFields(PrintWriter printWriter, String firstName,
+  private static boolean areInputFieldsValid(PrintWriter printWriter, String firstName,
       String lastName, String email, String title, String message) {
     boolean isInputValid = true;
 
