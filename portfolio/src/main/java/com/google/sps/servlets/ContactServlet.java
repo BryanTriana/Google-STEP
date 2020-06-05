@@ -7,6 +7,7 @@ import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.annotation.WebServlet;
@@ -34,6 +35,8 @@ public class ContactServlet extends HttpServlet {
     String title = request.getParameter(TITLE_PROPERTY_KEY);
     String message = request.getParameter(MESSAGE_PROPERTY_KEY);
 
+    PrintWriter printWriter = response.getWriter();
+
     Properties properties = new Properties();
     Session session = Session.getDefaultInstance(properties, null);
 
@@ -48,11 +51,16 @@ public class ContactServlet extends HttpServlet {
 
       response.setContentType("text/html");
 
-      PrintWriter printWriter = response.getWriter();
       printWriter.println("<h1>Message sent successfully!</h1>");
       printWriter.println("<p>I'll get back to you as soon as possible.</p>");
+    } catch (AddressException e) {
+      e.printStackTrace();
+
+      printWriter.println("<h1>Email address could not be parsed! Please try again.</h1>");
     } catch (MessagingException e) {
       e.printStackTrace();
+
+      printWriter.println("<h1>Message was not able to be sent! Please try again.</h1>");
     }
   }
 }
