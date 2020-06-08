@@ -34,29 +34,54 @@ function highlightActivePage() {
 }
 
 /**
- * Fetches comments from CommentServlet and adds them to the comment section in
- * the DOM.
+ * Fetches comments from CommentServlet and adds them to the comments section.
  */
-function getComments() {
-  fetch('/comment-data?commentLimit=' + $('#comment-limit').val())
-      .then((response) => response.json())
-      .then((comments) => {
-        const commentsContainer = $('#comments-container');
-        commentsContainer.empty();
+async function getComments() {
+  const commentsResponse =
+      await fetch('/comment-data?commentLimit=' + $('#comment-limit').val());
+  const comments = await commentsResponse.json();
 
-        for (comment of comments) {
-          commentsContainer.append(createComment(
-              comment.name, comment.message, moment(comment.timestampMillis)));
-        }
-      });
+  const commentsContainer = $('#comments-container');
+  commentsContainer.empty();
+
+  for (comment of comments) {
+    commentsContainer.append(createComment(
+        comment.name, comment.message, moment(comment.timestampMillis)));
+  }
 }
 
 /**
- * Creates a list element that displays information about the name, submission
- * time, and the message of a comment.
+ * Displays a div to post a comment if the user is logged in and has a nickname,
+ * if not then it displays prompts to login and to choose a nickname.
+ */
+async function allowPostComment() {
+  const loginResponse = await fetch('/login-data');
+  const isUserLoggedIn = await loginResponse.json();
+
+  if (!isUserLoggedIn) {
+    $('#nickname-section').addClass('invisible');
+    $('#post-comment').addClass('invisible');
+    return;
+  }
+
+  const nicknameResponse = await fetch('/nickname-data');
+  const nickname = await nicknameResponse.json();
+
+  if (nickname === '') {
+    $('#post-comment').addClass('invisible');
+  } else {
+    $('#nickname-section').addClass('invisible');
+  }
+
+  $('#login-section').addClass('invisible');
+}
+
+/**
+ * Creates a list element that displays information about the sender's email,
+ * submission time, and the message of a comment.
  *
  * @param { string } name - The name of the person posting the comment
- * @param { string } message - The message included in the
+ * @param { string } message - The message included in the comment
  * @param { moment } submissionMoment The moment the comment was sent
  * @returns { jQuery } The jQuery object that holds a list element representing
  *     a comment
