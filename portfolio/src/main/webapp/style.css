@@ -19,3 +19,7 @@ a:hover {
 .top-buffer {
   margin-top: 40px;
 }
+
+.invisible {
+  display: none;
+}
