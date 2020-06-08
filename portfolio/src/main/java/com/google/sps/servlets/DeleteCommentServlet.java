@@ -22,7 +22,7 @@ public class DeleteCommentServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-    Query query = new Query(CommentServletKeys.COMMENT_KIND);
+    Query query = new Query(CommentKeys.COMMENT_KIND);
     PreparedQuery queryResults = datastore.prepare(query);
 
     TransactionOptions options = TransactionOptions.Builder.withXG(true);
