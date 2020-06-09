@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet("/nickname-data")
 public class NicknameServlet extends HttpServlet {
+  private static int MAX_NICKNAME_CHARS = 32;
+
   /**
    * The response of the GET request contains the nickname of the current user if they are logged
    * in.
@@ -29,7 +31,8 @@ public class NicknameServlet extends HttpServlet {
       return;
     }
 
-    String nickname = NicknameFinder.getNickname(userService.getCurrentUser().getUserId());
+    String nickname =
+        NicknameFinder.getNickname(userService.getCurrentUser().getUserId()).orElse(null);
 
     response.setContentType("application/json");
     response.getWriter().println(new Gson().toJson(nickname));
@@ -43,8 +46,13 @@ public class NicknameServlet extends HttpServlet {
       return;
     }
 
-    String id = userService.getCurrentUser().getUserId();
     String nickname = request.getParameter(UserKeys.NICKNAME_PROPERTY);
+
+    if (!isNicknameValid(nickname)) {
+      return;
+    }
+
+    String id = userService.getCurrentUser().getUserId();
 
     Entity userDataEntity = new Entity(UserKeys.USER_KIND, id);
     userDataEntity.setProperty(UserKeys.ID_PROPERTY, id);
@@ -54,5 +62,14 @@ public class NicknameServlet extends HttpServlet {
     datastore.put(userDataEntity);
 
     response.sendRedirect("/blog.html");
+  }
+
+  /**
+   * Checks if the nickname given by the user is valid.
+   *
+   * @return boolean value of true if the nickname is valid, otherwise false.
+   */
+  private static boolean isNicknameValid(String nickname) {
+    return !nickname.isEmpty() && nickname.length() <= MAX_NICKNAME_CHARS;
   }
 }
