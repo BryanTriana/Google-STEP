@@ -37,15 +37,21 @@ function highlightActivePage() {
  * Displays the contact form is the user is logged in, otherwise
  * prompts the user to login.
  */
-async function getContactForm() {
+async function allowContactForm() {
   try {
-    await getLoginStatus();
+    const loginResponse = await fetch('/login-data');
+    const isUserLoggedIn = await loginResponse.json();
+
+    if (!isUserLoggedIn) {
+      $('#contact-section').addClass('invisible');
+      return;
+    }
 
     $('#login-section').addClass('invisible');
   } catch (err) {
     $('#contact-section').addClass('invisible');
 
-    console.log(err);
+    console.log('failed to fetch login status: ' + err);
   }
 }
 
@@ -76,52 +82,39 @@ async function getComments() {
  */
 async function allowPostComment() {
   try {
-    await getLoginStatus();
+    const loginResponse = await fetch('/login-data');
+    const isUserLoggedIn = await loginResponse.json();
+
+    if (!isUserLoggedIn) {
+      $('#nickname-section').addClass('invisible');
+      $('#post-comment').addClass('invisible');
+      return;
+    }
 
     $('#login-section').addClass('invisible');
   } catch (err) {
     $('#nickname-section').addClass('invisible');
     $('#post-comment').addClass('invisible');
 
-    console.log(err);
+    console.log('failed to fetch login status: ' + err);
 
     return;
   }
 
   try {
-    await getNickname();
+    const nicknameResponse = await fetch('/nickname-data');
+    const nickname = await nicknameResponse.json();
+
+    if (nickname === null) {
+      $('#post-comment').addClass('invisible');
+      return;
+    }
 
     $('#nickname-section').addClass('invisible');
   } catch (err) {
     $('#post-comment').addClass('invisible');
 
-    console.log(err);
-  }
-}
-
-/**
- * Fetches for the login status of the user and rejects
- * the promise if user is not logged in.
- */
-async function getLoginStatus() {
-  const loginResponse = await fetch('/login-data');
-  const isUserLoggedIn = await loginResponse.json();
-
-  if (!isUserLoggedIn) {
-    return Promise.reject('User is not logged in!');
-  }
-}
-
-/**
- * Fetches for the nickname of the current user and rejects
- * the promise if the user has no nickname.
- */
-async function getNickname() {
-  const nicknameResponse = await fetch('/nickname-data');
-  const nickname = await nicknameResponse.json();
-
-  if (nickname === '') {
-    return Promise.reject('User has no nickname!');
+    console.log('failed to fetch nickname: ' + err);
   }
 }
 
