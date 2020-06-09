@@ -34,19 +34,39 @@ function highlightActivePage() {
 }
 
 /**
+ * Displays the contact form is the user is logged in, otherwise
+ * prompts the user to login.
+ */
+async function getContactForm() {
+  try {
+    await getLoginStatus();
+
+    $('#login-section').addClass('invisible');
+  } catch (err) {
+    $('#contact-section').addClass('invisible');
+
+    console.log(err);
+  }
+}
+
+/**
  * Fetches comments from CommentServlet and adds them to the comments section.
  */
 async function getComments() {
-  const commentsResponse =
-      await fetch('/comment-data?commentLimit=' + $('#comment-limit').val());
-  const comments = await commentsResponse.json();
+  try {
+    const commentsResponse =
+        await fetch('/comment-data?commentLimit=' + $('#comment-limit').val());
+    const comments = await commentsResponse.json();
 
-  const commentsContainer = $('#comments-container');
-  commentsContainer.empty();
+    const commentsContainer = $('#comments-container');
+    commentsContainer.empty();
 
-  for (comment of comments) {
-    commentsContainer.append(createComment(
-        comment.name, comment.message, moment(comment.timestampMillis)));
+    for (comment of comments) {
+      commentsContainer.append(createComment(
+          comment.name, comment.message, moment(comment.timestampMillis)));
+    }
+  } catch (err) {
+    console.log('failed to fetch comments: ' + err);
   }
 }
 
@@ -55,29 +75,58 @@ async function getComments() {
  * if not then it displays prompts to login and to choose a nickname.
  */
 async function allowPostComment() {
+  try {
+    await getLoginStatus();
+
+    $('#login-section').addClass('invisible');
+  } catch (err) {
+    $('#nickname-section').addClass('invisible');
+    $('#post-comment').addClass('invisible');
+
+    console.log(err);
+
+    return;
+  }
+
+  try {
+    await getNickname();
+
+    $('#nickname-section').addClass('invisible');
+  } catch (err) {
+    $('#post-comment').addClass('invisible');
+
+    console.log(err);
+  }
+}
+
+/**
+ * Fetches for the login status of the user and rejects
+ * the promise if user is not logged in.
+ */
+async function getLoginStatus() {
   const loginResponse = await fetch('/login-data');
   const isUserLoggedIn = await loginResponse.json();
 
   if (!isUserLoggedIn) {
-    $('#nickname-section').addClass('invisible');
-    $('#post-comment').addClass('invisible');
-    return;
+    return Promise.reject('User is not logged in!');
   }
+}
 
+/**
+ * Fetches for the nickname of the current user and rejects
+ * the promise if the user has no nickname.
+ */
+async function getNickname() {
   const nicknameResponse = await fetch('/nickname-data');
   const nickname = await nicknameResponse.json();
 
   if (nickname === '') {
-    $('#post-comment').addClass('invisible');
-  } else {
-    $('#nickname-section').addClass('invisible');
+    return Promise.reject('User has no nickname!');
   }
-
-  $('#login-section').addClass('invisible');
 }
 
 /**
- * Creates a list element that displays information about the sender's email,
+ * Creates a list element that displays information about the sender's name,
  * submission time, and the message of a comment.
  *
  * @param { string } name - The name of the person posting the comment
