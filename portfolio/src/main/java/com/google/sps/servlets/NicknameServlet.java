@@ -17,9 +17,17 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet("/nickname-data")
 public class NicknameServlet extends HttpServlet {
+  /**
+   * The response of the GET request contains the nickname of the current user if they are logged
+   * in.
+   */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
+
+    if (!userService.isUserLoggedIn()) {
+      return;
+    }
 
     String nickname = NicknameFinder.getNickname(userService.getCurrentUser().getUserId());
 
@@ -30,6 +38,10 @@ public class NicknameServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
+
+    if (!userService.isUserLoggedIn()) {
+      return;
+    }
 
     String id = userService.getCurrentUser().getUserId();
     String nickname = request.getParameter(UserKeys.NICKNAME_PROPERTY);
