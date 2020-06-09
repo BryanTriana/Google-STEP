@@ -20,69 +20,66 @@
     </script>
     <title>Bryan Triana - Contact</title>
   </head>
-  <body>
+  <body onload="getContactForm()">
     <div id="navbar"></div>
     <div class="container">
-      <h4>Let's get together!</h4>
-      <form method="POST" action="/contact-data">
-        <div class="form-group">
-          <label for="first-name-entry">First Name:</label>
-          <input
-            class="form-control"
-            type="text"
-            name="first-name"
-            id="first-name-entry"
-            maxlength="32"
-            required
-          />
-        </div>
-        <div class="form-group">
-          <label for="last-name-entry">Last Name:</label>
-          <input
-            class="form-control"
-            type="text"
-            name="last-name"
-            id="last-name-entry"
-            maxlength="32"
-            required
-          />
-        </div>
-        <div class="form-group">
-          <label for="email-entry">Email:</label>
-          <input
-            class="form-control"
-            type="email"
-            name="email"
-            id="email-entry"
-            maxlength="320"
-            required
-          />
-        </div>
-        <div class="form-group">
-          <label for="title-entry">Title:</label>
-          <input
-            class="form-control"
-            type="text"
-            name="title"
-            id="title-entry"
-            maxlength="64"
-            required
-          />
-        </div>
-        <div class="form-group">
-          <label for="message-entry">Message:</label>
-          <textarea
-            class="form-control"
-            type="text"
-            name="message"
-            id="message-entry"
-            rows="7"
-            maxlength="1024"
-            required
-          ></textarea>
-        </div>
-        <input class="btn btn-dark" type="submit" />
-      </form>
+      <div id="login-section">
+        <h3>Please login to contact me!</h3>
+        <form method="POST" action="/login-data?redirectURL=/contact.html">
+          <input class="btn btn-dark" type="submit" value="login" />
+        </form>
+      </div>
+      <div id="contact-section">
+        <h3>Let's get together!</h3>
+        <form method="POST" action="/contact-data">
+          <div class="form-group">
+            <label for="first-name-entry">First Name:</label>
+            <input
+              class="form-control"
+              type="text"
+              name="first-name"
+              id="first-name-entry"
+              maxlength="32"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="last-name-entry">Last Name:</label>
+            <input
+              class="form-control"
+              type="text"
+              name="last-name"
+              id="last-name-entry"
+              maxlength="32"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="title-entry">Title:</label>
+            <input
+              class="form-control"
+              type="text"
+              name="title"
+              id="title-entry"
+              maxlength="64"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="message-entry">Message:</label>
+            <textarea
+              class="form-control"
+              type="text"
+              name="message"
+              id="message-entry"
+              rows="7"
+              maxlength="1024"
+              required
+            ></textarea>
+          </div>
+          <input class="btn btn-dark" type="submit" />
+        </form>
+      </div>
     </div>
   </body>
 </html>
