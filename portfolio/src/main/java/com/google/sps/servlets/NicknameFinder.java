@@ -32,9 +32,7 @@ final class NicknameFinder {
       return "";
     }
 
-    String nickname = (String) userEntity.getProperty(UserKeys.NICKNAME_PROPERTY);
-
-    return nickname;
+    return (String) userEntity.getProperty(UserKeys.NICKNAME_PROPERTY);
   }
 
   private NicknameFinder(){};
