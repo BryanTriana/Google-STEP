@@ -8,5 +8,5 @@ final class UserKeys {
   static final String NICKNAME_PROPERTY = "nickname";
   static final String ID_PROPERTY = "id";
 
-  private UserKeys(){};
+  private UserKeys() {}
 }
