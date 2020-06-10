@@ -155,6 +155,28 @@
         <div class="top-buffer">
           <h3>Comments:</h3>
           <div class="form-group">
+            <label for="language-selector"
+              >Select the language to view comments in:</label
+            >
+            <select
+              class="form-control"
+              id="language-selector"
+              name="language-selector"
+              onchange="getComments()"
+            >
+              <option value="en">English</option>
+              <option value="es">Spanish</option>
+              <option value="fr">French</option>
+              <option value="zh">Chinese</option>
+              <option value="ja">Japanese</option>
+              <option value="pt">Portuguese</option>
+              <option value="it">Italian</option>
+              <option value="ru">Russian</option>
+              <option value="hi">Hindi</option>
+              <option value="ar">Arabic</option>
+            </select>
+          </div>
+          <div class="form-group">
             <label for="comment-limit"
               >Select number of comments to display:</label
             >

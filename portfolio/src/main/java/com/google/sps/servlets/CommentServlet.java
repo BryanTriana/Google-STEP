@@ -10,6 +10,11 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.cloud.translate.Translate;
+import com.google.cloud.translate.Translate.TranslateOption;
+import com.google.cloud.translate.TranslateException;
+import com.google.cloud.translate.TranslateOptions;
+import com.google.cloud.translate.Translation;
 import com.google.gson.Gson;
 import com.google.sps.data.Comment;
 import java.io.IOException;
@@ -31,6 +36,7 @@ public class CommentServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     int commentLimit = getCommentLimit(request);
+    String languageCode = request.getParameter("languageCode");
 
     Query query = new Query(CommentKeys.COMMENT_KIND)
                       .addSort(CommentKeys.TIMESTAMP_MILLIS_PROPERTY, SortDirection.DESCENDING);
@@ -48,7 +54,8 @@ public class CommentServlet extends HttpServlet {
       long timestampMillis =
           (long) commentEntity.getProperty(CommentKeys.TIMESTAMP_MILLIS_PROPERTY);
 
-      comments.add(new Comment(email, name, message, timestampMillis));
+      comments.add(
+          new Comment(email, name, getMessageTranslation(message, languageCode), timestampMillis));
     }
 
     response.setContentType("application/json");
@@ -111,6 +118,29 @@ public class CommentServlet extends HttpServlet {
     }
 
     return commentLimit;
+  }
+
+  /**
+   * Translates a message using Google's Translate API.
+   * @param message The message to be translated
+   * @param languageCode The ISO 639 language code of the language we want to translate to
+   *
+   * @return The translated message if the translation was successful, otherwise the original text
+   */
+  private static String getMessageTranslation(String message, String languageCode) {
+    String translatedMessage;
+
+    try {
+      Translate translationService = TranslateOptions.getDefaultInstance().getService();
+      Translation translation =
+          translationService.translate(message, TranslateOption.targetLanguage(languageCode));
+      translatedMessage = translation.getTranslatedText();
+    } catch (TranslateException e) {
+      System.err.println("Message could not be translated: " + e.getMessage());
+      return message;
+    }
+
+    return translatedMessage;
   }
 
   /**
