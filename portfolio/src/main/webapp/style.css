@@ -1,3 +1,7 @@
+body {
+  padding-bottom: 50px;
+}
+
 p {
   word-wrap: break-word;
 }
@@ -26,4 +30,10 @@ a:hover {
 
 .invisible {
   display: none;
+}
+
+#map {
+  border: thin solid black;
+  height: 600px;
+  width: 600px;
 }
