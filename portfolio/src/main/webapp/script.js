@@ -143,13 +143,17 @@ function createComment(name, message, submissionMoment) {
  * Fetches markers data from MapsServlet and adds them to a map.
  */
 function createMap() {
-  fetch('/maps-data').then(response => response.json()).then(markers => {
-     const map = new google.maps.Map($('#map')[0], 
-      { zoom: 2, center: { lat: 0, lng: 0 } });
+  fetch('/maps-data').then((response) => response.json()).then((markers) => {
+    const map = new google.maps.Map($('#map')[0], {
+      zoom: 2,
+      center: {lat: 0, lng: 0},
+    });
 
-      for(marker of markers) {
-        new google.maps.Marker(
-            {position: {lat: marker.latitude, lng: marker.longitude}, map: map});
-      }
+    for (marker of markers) {
+      new google.maps.Marker({
+        position: {lat: marker.latitude, lng: marker.longitude},
+        map: map,
+      });
+    }
   });
 }
