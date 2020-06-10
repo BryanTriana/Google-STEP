@@ -31,7 +31,7 @@ public class MapsServlet extends HttpServlet {
 
       if (tokens.length != 2) {
         System.err.println(
-            "Line does not contain two comma-separated elements describing latitude and longitue: "
+            "Line does not contain two comma-separated elements describing latitude and longitude: "
             + line);
         continue;
       }
