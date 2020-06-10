@@ -1,3 +1,7 @@
+p {
+  word-wrap: break-word;
+}
+
 a {
   color: dimgray;
   text-decoration: none;
@@ -18,4 +22,8 @@ a:hover {
 
 .top-buffer {
   margin-top: 40px;
+}
+
+.invisible {
+  display: none;
 }

@@ -22,7 +22,7 @@
     </script>
     <title>Bryan Triana - Blog</title>
   </head>
-  <body onload="getComments()">
+  <body onload="allowPostComment(); getComments();">
     <div id="navbar"></div>
     <div class="container">
       <h3>How to Create a Random String in C++</h3>
@@ -138,29 +138,43 @@
           Source Code
         </a>
       </h4>
-      <div class="top-buffer" id="post-comment"></div>
-      <div class="top-buffer">
-        <h3>Comments:</h3>
-        <div class="form-group">
-          <label for="comment-limit"
-            >Select number of comments to display:</label
-          >
-          <select
-            class="form-control"
-            id="comment-limit"
-            name="comment-limit"
-            onchange="getComments()"
-          >
-            <option value="1">1</option>
-            <option value="3">3</option>
-            <option value="5" selected>5</option>
-            <option value="10">10</option>
-          </select>
-        </div>
-        <form method="POST" action="/delete-comment-data">
-          <button class="btn btn-dark" type="submit">Delete Comments</button>
+      <div class="top-buffer" id="login-section">
+        <h3>Login to post a comment</h3>
+        <form method="POST" action="/login-data?redirectURL=/blog.html">
+          <input class="btn btn-dark" type="submit" value="Login" />
         </form>
-        <ul class="list-group top-buffer" id="comments-container"></ul>
+      </div>
+      <div class="top-buffer" id="nickname-section">
+        <h3>Choose a nickname to post a comment:</h3>
+        <form action="/nickname.html">
+          <input class="btn btn-dark" type="submit" value="Choose Nickname" />
+        </form>
+      </div>
+      <div id="comment-section">
+        <div class="top-buffer" id="post-comment"></div>
+        <div class="top-buffer">
+          <h3>Comments:</h3>
+          <div class="form-group">
+            <label for="comment-limit"
+              >Select number of comments to display:</label
+            >
+            <select
+              class="form-control"
+              id="comment-limit"
+              name="comment-limit"
+              onchange="getComments()"
+            >
+              <option value="1">1</option>
+              <option value="3">3</option>
+              <option value="5" selected>5</option>
+              <option value="10">10</option>
+            </select>
+          </div>
+          <form method="POST" action="/delete-comment-data">
+            <input class="btn btn-dark" type="submit" value="Delete Comments" />
+          </form>
+          <ul class="list-group top-buffer" id="comments-container"></ul>
+        </div>
       </div>
     </div>
   </body>

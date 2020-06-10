@@ -1,5 +1,7 @@
 package com.google.sps.servlets;
 
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Properties;
@@ -22,26 +24,30 @@ import javax.servlet.http.HttpServletResponse;
 public class ContactServlet extends HttpServlet {
   private static final String FIRST_NAME_PARAMETER_KEY = "first-name";
   private static final String LAST_NAME_PARAMETER_KEY = "last-name";
-  private static final String EMAIL_PROPERTY_KEY = "email";
   private static final String TITLE_PROPERTY_KEY = "title";
   private static final String MESSAGE_PROPERTY_KEY = "message";
   private static final String RECIPIENT_EMAIL = "bryantriana@google.com";
   private static final int MAX_NAME_CHARS = 32;
-  private static final int MAX_EMAIL_CHARS = 320;
   private static final int MAX_TITLE_CHARS = 64;
   private static final int MAX_MESSAGE_CHARS = 1024;
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    UserService userService = UserServiceFactory.getUserService();
+
+    if (!userService.isUserLoggedIn()) {
+      return;
+    }
+
     String firstName = request.getParameter(FIRST_NAME_PARAMETER_KEY);
     String lastName = request.getParameter(LAST_NAME_PARAMETER_KEY);
-    String senderEmail = request.getParameter(EMAIL_PROPERTY_KEY);
+    String senderEmail = userService.getCurrentUser().getEmail();
     String title = request.getParameter(TITLE_PROPERTY_KEY);
     String message = request.getParameter(MESSAGE_PROPERTY_KEY);
 
     PrintWriter printWriter = response.getWriter();
 
-    if (!areInputFieldsValid(printWriter, firstName, lastName, senderEmail, title, message)) {
+    if (!areInputFieldsValid(printWriter, firstName, lastName, title, message)) {
       return;
     }
 
@@ -79,13 +85,12 @@ public class ContactServlet extends HttpServlet {
    *     validation mistakes
    * @param firstName First name field given by the HTTP request
    * @param lastName Last name field given by the HTTP request
-   * @param email Email field given by the HTTP request
    * @param title Title field given by the HTTP request
    * @param message Message field given by the HTTP request
    * @return boolean value that is true if all the input fields are valid, otherwise false
    */
-  private static boolean areInputFieldsValid(PrintWriter printWriter, String firstName,
-      String lastName, String email, String title, String message) {
+  private static boolean areInputFieldsValid(
+      PrintWriter printWriter, String firstName, String lastName, String title, String message) {
     boolean isInputValid = true;
 
     if (firstName.length() > MAX_NAME_CHARS) {
@@ -96,11 +101,6 @@ public class ContactServlet extends HttpServlet {
     if (lastName.length() > MAX_NAME_CHARS) {
       printWriter.println(
           "<h1>Last name cannot exceed more than " + MAX_NAME_CHARS + " characters!</h1>");
-      isInputValid = false;
-    }
-    if (email.length() > MAX_EMAIL_CHARS) {
-      printWriter.println(
-          "<h1>Email cannot exceed more than " + MAX_EMAIL_CHARS + " characters!</h1>");
       isInputValid = false;
     }
     if (title.length() > MAX_TITLE_CHARS) {

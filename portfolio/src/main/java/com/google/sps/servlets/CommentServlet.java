@@ -7,6 +7,9 @@ import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.users.User;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
 import com.google.sps.data.Comment;
 import java.io.IOException;
@@ -23,14 +26,14 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/comment-data")
 public class CommentServlet extends HttpServlet {
   private static final int DEFAULT_COMMENT_LIMIT = 10;
+  private static final int MAX_COMMENT_CHARS = 320;
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     int commentLimit = getCommentLimit(request);
 
-    Query query =
-        new Query(CommentServletKeys.COMMENT_KIND)
-            .addSort(CommentServletKeys.TIMESTAMP_MILLIS_PROPERTY, SortDirection.DESCENDING);
+    Query query = new Query(CommentKeys.COMMENT_KIND)
+                      .addSort(CommentKeys.TIMESTAMP_MILLIS_PROPERTY, SortDirection.DESCENDING);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery queryResults = datastore.prepare(query);
@@ -39,12 +42,13 @@ public class CommentServlet extends HttpServlet {
 
     for (Entity commentEntity :
         queryResults.asIterable(FetchOptions.Builder.withLimit(commentLimit))) {
-      String name = (String) commentEntity.getProperty(CommentServletKeys.NAME_PROPERTY);
-      String message = (String) commentEntity.getProperty(CommentServletKeys.MESSAGE_PROPERTY);
+      String email = (String) commentEntity.getProperty(CommentKeys.EMAIL_PROPERTY);
+      String name = (String) commentEntity.getProperty(CommentKeys.NAME_PROPERTY);
+      String message = (String) commentEntity.getProperty(CommentKeys.MESSAGE_PROPERTY);
       long timestampMillis =
-          (long) commentEntity.getProperty(CommentServletKeys.TIMESTAMP_MILLIS_PROPERTY);
+          (long) commentEntity.getProperty(CommentKeys.TIMESTAMP_MILLIS_PROPERTY);
 
-      comments.add(new Comment(name, message, timestampMillis));
+      comments.add(new Comment(email, name, message, timestampMillis));
     }
 
     response.setContentType("application/json");
@@ -53,14 +57,29 @@ public class CommentServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String name = request.getParameter(CommentServletKeys.NAME_PROPERTY);
-    String message = request.getParameter(CommentServletKeys.MESSAGE_PROPERTY);
+    UserService userService = UserServiceFactory.getUserService();
+
+    if (!userService.isUserLoggedIn()) {
+      return;
+    }
+
+    String message = request.getParameter(CommentKeys.MESSAGE_PROPERTY);
+
+    if (!isMessageValid(message)) {
+      return;
+    }
+
+    User user = userService.getCurrentUser();
+
+    String email = user.getEmail();
+    String name = NicknameFinder.getNickname(user.getUserId()).orElse(user.getUserId());
     long timestampMillis = System.currentTimeMillis();
 
-    Entity commentEntity = new Entity(CommentServletKeys.COMMENT_KIND);
-    commentEntity.setProperty(CommentServletKeys.NAME_PROPERTY, name);
-    commentEntity.setProperty(CommentServletKeys.MESSAGE_PROPERTY, message);
-    commentEntity.setProperty(CommentServletKeys.TIMESTAMP_MILLIS_PROPERTY, timestampMillis);
+    Entity commentEntity = new Entity(CommentKeys.COMMENT_KIND);
+    commentEntity.setProperty(CommentKeys.EMAIL_PROPERTY, email);
+    commentEntity.setProperty(CommentKeys.NAME_PROPERTY, name);
+    commentEntity.setProperty(CommentKeys.MESSAGE_PROPERTY, message);
+    commentEntity.setProperty(CommentKeys.TIMESTAMP_MILLIS_PROPERTY, timestampMillis);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(commentEntity);
@@ -73,10 +92,10 @@ public class CommentServlet extends HttpServlet {
    *
    * @param request The HTTP request that holds the comment limit parameter
    * @return The integer value for the comments limit, if the value found is invalid then
-   *         it returns a default value
+   *         it returns a default value.
    */
   private static int getCommentLimit(HttpServletRequest request) {
-    String commentLimitString = request.getParameter(CommentServletKeys.COMMENT_LIMIT_PROPERTY);
+    String commentLimitString = request.getParameter(CommentKeys.COMMENT_LIMIT_PROPERTY);
 
     int commentLimit;
     try {
@@ -92,5 +111,14 @@ public class CommentServlet extends HttpServlet {
     }
 
     return commentLimit;
+  }
+
+  /**
+   * Checks if the message in the comment is of valid length.
+   *
+   * @return boolean value of true if the message is valid, otherwise false.
+   */
+  private static boolean isMessageValid(String message) {
+    return !message.isEmpty() && message.length() <= MAX_COMMENT_CHARS;
   }
 }
