@@ -29,17 +29,26 @@ public class MapsServlet extends HttpServlet {
       String line = scanner.nextLine();
       String[] tokens = line.split(",");
 
+      if (tokens.length != 2) {
+        System.err.println(
+            "Line does not contain two comma-separated elements describing latitude and longitue: "
+            + line);
+        continue;
+      }
+
       float latitude, longitude;
       try {
         latitude = Float.parseFloat(tokens[0]);
       } catch (NumberFormatException e) {
-        latitude = 0.f;
+        System.err.println("Failed to parse latitude string into float!");
+        continue;
       }
 
       try {
         longitude = Float.parseFloat(tokens[1]);
       } catch (NumberFormatException e) {
-        longitude = 0.f;
+        System.err.println("Failed to parse longitude string into float!");
+        continue;
       }
 
       markers.add(new Marker(latitude, longitude));
