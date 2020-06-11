@@ -92,7 +92,7 @@ public class CommentServlet extends HttpServlet {
    *
    * @param request The HTTP request that holds the comment limit parameter
    * @return The integer value for the comments limit, if the value found is invalid then
-   *         it returns a default value.
+   *         it returns a default value
    */
   private static int getCommentLimit(HttpServletRequest request) {
     String commentLimitString = request.getParameter(CommentKeys.COMMENT_LIMIT_PROPERTY);
@@ -116,9 +116,9 @@ public class CommentServlet extends HttpServlet {
   /**
    * Checks if the message in the comment is of valid length.
    *
-   * @return boolean value of true if the message is valid, otherwise false.
+   * @return boolean value of true if the message is valid, otherwise false
    */
   private static boolean isMessageValid(String message) {
-    return !message.isEmpty() && message.length() <= MAX_COMMENT_CHARS;
+    return message != null && !message.isEmpty() && message.length() <= MAX_COMMENT_CHARS;
   }
 }

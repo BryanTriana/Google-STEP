@@ -36,5 +36,5 @@ final class NicknameFinder {
     return Optional.ofNullable((String) userEntity.getProperty(UserKeys.NICKNAME_PROPERTY));
   }
 
-  private NicknameFinder() {};
+  private NicknameFinder() {}
 }

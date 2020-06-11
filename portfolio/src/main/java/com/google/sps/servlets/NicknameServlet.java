@@ -67,9 +67,9 @@ public class NicknameServlet extends HttpServlet {
   /**
    * Checks if the nickname given by the user is valid.
    *
-   * @return boolean value of true if the nickname is valid, otherwise false.
+   * @return boolean value of true if the nickname is valid, otherwise false
    */
   private static boolean isNicknameValid(String nickname) {
-    return !nickname.isEmpty() && nickname.length() <= MAX_NICKNAME_CHARS;
+    return nickname != null && !nickname.isEmpty() && nickname.length() <= MAX_NICKNAME_CHARS;
   }
 }

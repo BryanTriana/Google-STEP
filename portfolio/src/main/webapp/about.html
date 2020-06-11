@@ -11,6 +11,7 @@
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     />
     <link rel="stylesheet" href="style.css" />
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBlW8FZfC1YKJBdLPk0_QpCQg4yZGrJRc"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -20,7 +21,7 @@
     </script>
     <title>Bryan Triana - About</title>
   </head>
-  <body>
+  <body onload="createMap()">
     <div id="navbar"></div>
     <div class="container">
       <img class="img-fluid" src="images/profile.jpeg" /><br />
@@ -45,6 +46,8 @@
       >
         <img class="img-fluid" src="images/Github.png" />
       </a>
+      <h3 class="top-buffer">Places I have traveled to:</h3>
+      <div class="top-buffer" id="map"></div>
     </div>
   </body>
 </html>

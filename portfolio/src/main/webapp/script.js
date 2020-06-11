@@ -56,27 +56,6 @@ async function allowContactForm() {
 }
 
 /**
- * Fetches comments from CommentServlet and adds them to the comments section.
- */
-async function getComments() {
-  try {
-    const commentsResponse =
-        await fetch('/comment-data?commentLimit=' + $('#comment-limit').val());
-    const comments = await commentsResponse.json();
-
-    const commentsContainer = $('#comments-container');
-    commentsContainer.empty();
-
-    for (comment of comments) {
-      commentsContainer.append(createComment(
-          comment.name, comment.message, moment(comment.timestampMillis)));
-    }
-  } catch (err) {
-    console.log('failed to fetch comments: ' + err);
-  }
-}
-
-/**
  * Displays a div to post a comment if the user is logged in and has a nickname,
  * if not then it displays prompts to login and to choose a nickname.
  */
@@ -119,6 +98,27 @@ async function allowPostComment() {
 }
 
 /**
+ * Fetches comments from CommentServlet and adds them to the comments section.
+ */
+async function getComments() {
+  try {
+    const commentsResponse =
+        await fetch('/comment-data?commentLimit=' + $('#comment-limit').val());
+    const comments = await commentsResponse.json();
+
+    const commentsContainer = $('#comments-container');
+    commentsContainer.empty();
+
+    for (comment of comments) {
+      commentsContainer.append(createComment(
+          comment.name, comment.message, moment(comment.timestampMillis)));
+    }
+  } catch (err) {
+    console.log('failed to fetch comments: ' + err);
+  }
+}
+
+/**
  * Creates a list element that displays information about the sender's name,
  * submission time, and the message of a comment.
  *
@@ -137,4 +137,23 @@ function createComment(name, message, submissionMoment) {
   commentElem.append($('<p>' + message + '</p>'));
 
   return commentElem;
+}
+
+/**
+ * Fetches markers data from MapsServlet and adds them to a map.
+ */
+function createMap() {
+  fetch('/maps-data').then((response) => response.json()).then((markers) => {
+    const map = new google.maps.Map($('#map')[0], {
+      zoom: 2,
+      center: {lat: 0, lng: 0},
+    });
+
+    for (marker of markers) {
+      new google.maps.Marker({
+        position: {lat: marker.latitude, lng: marker.longitude},
+        map: map,
+      });
+    }
+  });
 }
