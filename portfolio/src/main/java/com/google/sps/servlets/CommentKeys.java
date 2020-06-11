@@ -10,6 +10,7 @@ final class CommentKeys {
   static final String MESSAGE_PROPERTY = "message";
   static final String TIMESTAMP_MILLIS_PROPERTY = "timestampMillis";
   static final String COMMENT_LIMIT_PROPERTY = "commentLimit";
+  static final String LANGUAGE_CODE_PROPERTY = "languageCode";
 
   private CommentKeys() {}
 }

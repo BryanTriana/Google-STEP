@@ -36,7 +36,7 @@ public class CommentServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     int commentLimit = getCommentLimit(request);
-    String languageCode = request.getParameter("languageCode");
+    String languageCode = request.getParameter(CommentKeys.LANGUAGE_CODE_PROPERTY);
 
     Query query = new Query(CommentKeys.COMMENT_KIND)
                       .addSort(CommentKeys.TIMESTAMP_MILLIS_PROPERTY, SortDirection.DESCENDING);
