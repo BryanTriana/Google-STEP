@@ -14,6 +14,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="script.js"></script>
     <script>
       loadSelector("#navbar", "navbar.html");
@@ -23,7 +24,7 @@
   <body>
     <div id="navbar"></div>
     <div class="container">
-      <div class="row">
+      <div class="top-buffer row">
         <div class="col" align="center">
           <a
             target="_blank"
@@ -221,6 +222,26 @@
           </a>
         </div>
       </div>
+      <div class="top-buffer" id="project-chart"></div>
+      <form method="POST" action="/project-data">
+        <div class="top-buffer form-group">
+          <label for="project-selector"
+            >Vote on what kind of project I should work on next:</label
+          >
+          <select class="form-control" id="project-selector" name="project">
+            <option value="Web App">Web App</option>
+            <option value="Mobile App">Mobile App</option>
+            <option value="Video Game">Video Game</option>
+            <option value="Machine Learning Project"
+              >Machine Learning Project</option
+            >
+            <option value="Embedded Programming Project"
+              >Embedded Programming Project</option
+            >
+          </select>
+        </div>
+        <input class="btn btn-dark" type="submit" value="Vote" />
+      </form>
     </div>
   </body>
 </html>
