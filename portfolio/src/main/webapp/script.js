@@ -102,8 +102,10 @@ async function allowPostComment() {
  */
 async function getComments() {
   try {
-    const commentsResponse =
-        await fetch('/comment-data?commentLimit=' + $('#comment-limit').val());
+    const commentsResponse = await fetch(
+        '/comment-data?commentLimit=' + $('#comment-limit').val() +
+        '&languageCode=' + $('#language-selector').val());
+        
     const comments = await commentsResponse.json();
 
     const commentsContainer = $('#comments-container');
