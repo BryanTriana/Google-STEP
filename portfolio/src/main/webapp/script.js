@@ -105,7 +105,7 @@ async function getComments() {
     const commentsResponse = await fetch(
         '/comment-data?commentLimit=' + $('#comment-limit').val() +
         '&languageCode=' + $('#language-selector').val());
-        
+
     const comments = await commentsResponse.json();
 
     const commentsContainer = $('#comments-container');
@@ -158,4 +158,39 @@ function createMap() {
       });
     }
   });
+}
+
+google.charts.load('current', {packages: ['corechart']});
+google.charts.setOnLoadCallback(drawProjectChart);
+
+/**
+ * Fetches project idea voting data from ProjectServlet and draws column chart
+ * showing the amount of votes each project has.
+ */
+function drawProjectChart() {
+  fetch('/project-data')
+      .then((response) => response.json())
+      .then((projectVoteMap) => {
+        const projectTable = new google.visualization.DataTable();
+        projectTable.addColumn('string', 'Project');
+        projectTable.addColumn('number', 'Votes');
+
+        Object.keys(projectVoteMap).forEach((project) => {
+          projectTable.addRow([project, projectVoteMap[project]]);
+        });
+
+        const options = {
+          title: 'Next Project Ideas',
+          height: 500,
+          width: $('#container').width(),
+          titleTextStyle: {
+            bold: true,
+            fontSize: 24,
+          },
+        };
+
+        const chart =
+            new google.visualization.ColumnChart($('#project-chart')[0]);
+        chart.draw(projectTable, options);
+      });
 }
