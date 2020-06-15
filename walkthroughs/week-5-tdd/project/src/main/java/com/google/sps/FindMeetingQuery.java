@@ -68,11 +68,11 @@ public final class FindMeetingQuery {
    *
    * @param events list of events occurring in one day
    * @param attendees list of unique attendees required in the meeting
-   * @param meetingDuration the minimum meeting duration
+   * @param meetingDurationMinutes the minimum meeting duration
    * @return list with all non-overlapping available times for the meeting sorted in ascending order
    */
   private static List<TimeRange> getAvailableIntervals(
-      Collection<Event> events, Collection<String> attendees, Long meetingDuration) {
+      Collection<Event> events, Collection<String> attendees, Long meetingDurationMinutes) {
     List<TimeRange> busyIntervals = new ArrayList<>();
 
     for (Event event : events) {
@@ -95,7 +95,7 @@ public final class FindMeetingQuery {
     // Add boundary at the end of the day.
     busyIntervals.add(TimeRange.fromStartDuration(TimeRange.END_OF_DAY + 1, 0));
 
-    return getAvailableIntervals(getMergedIntervals(busyIntervals), meetingDuration);
+    return getAvailableIntervals(getMergedIntervals(busyIntervals), meetingDurationMinutes);
   }
 
   /**
@@ -103,11 +103,11 @@ public final class FindMeetingQuery {
    * complement.
    *
    * @param busyIntervals list containing busy non-overlapping intervals sorted in ascending order
-   * @param meetingDuration the minimum meeting duration
+   * @param meetingDurationMinutes the minimum meeting duration
    * @return list containing the available intervals in ascending order
    */
   private static List<TimeRange> getAvailableIntervals(
-      List<TimeRange> busyIntervals, Long meetingDuration) {
+      List<TimeRange> busyIntervals, Long meetingDurationMinutes) {
     List<TimeRange> availableIntervals = new ArrayList<>();
 
     // Checks if there is free time between two consecutive intervals.
@@ -115,7 +115,7 @@ public final class FindMeetingQuery {
       TimeRange interval = TimeRange.fromStartEnd(
           busyIntervals.get(i).end(), busyIntervals.get(i + 1).start(), false);
 
-      if (interval.duration() >= meetingDuration) {
+      if (interval.duration() >= meetingDurationMinutes) {
         availableIntervals.add(interval);
       }
     }
@@ -162,11 +162,11 @@ public final class FindMeetingQuery {
    *     sorted based in ascending order
    * @param intervalsB the second interval list to merge - must have no overlapping intervals and be
    *     sorted based in ascending order
-   * @param meetingDuration the minimum meeting duration
+   * @param meetingDurationMinutes the minimum meeting duration
    * @return merged list of non-overlapping intervals sorted in ascending order
    */
   private static List<TimeRange> getMergedIntervals(
-      List<TimeRange> intervalsA, List<TimeRange> intervalsB, Long meetingDuration) {
+      List<TimeRange> intervalsA, List<TimeRange> intervalsB, Long meetingDurationMinutes) {
     List<TimeRange> mergedIntervals = new ArrayList<>();
 
     int i = 0, j = 0;
@@ -175,7 +175,7 @@ public final class FindMeetingQuery {
       int start = Math.max(intervalsA.get(i).start(), intervalsB.get(j).start());
       int end = Math.min(intervalsA.get(i).end(), intervalsB.get(j).end());
 
-      if (end - start >= meetingDuration) {
+      if (end - start >= meetingDurationMinutes) {
         mergedIntervals.add(TimeRange.fromStartEnd(start, end, false));
       }
 
