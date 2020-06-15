@@ -31,7 +31,7 @@ public final class FindMeetingQuery {
    *
    * @param events the events occurring in a single day
    * @param request the meeting that needs to be accommodated - can't be longer than a day
-   * @return list of all available meeting times within a single day
+   * @return list of all available meeting times within a single day in ascending order
    */
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     if (request.getDuration() > TimeRange.WHOLE_DAY.duration()) {
@@ -84,9 +84,9 @@ public final class FindMeetingQuery {
    * Finds the available intervals from a list of busy intervals by calculating for their
    * complement.
    *
-   * @param busyIntervals the list containing busy non-overlapping intervals
+   * @param busyIntervals list containing busy non-overlapping intervals sorted in ascending order
    * @param request the meeting request used to validate the time interval
-   * @return a list containing the available intervals
+   * @return list containing the available intervals in ascending order
    */
   private static List<TimeRange> getAvailableIntervals(
       List<TimeRange> busyIntervals, MeetingRequest request) {
@@ -120,7 +120,7 @@ public final class FindMeetingQuery {
    * Merges the time intervals that are overlapping.
    *
    * @param intervals sorted list of intervals based on starting times in ascending order
-   * @return new list with no overlapping intervals
+   * @return merged list of non-overlapping intervals sorted in ascending order
    */
   private static List<TimeRange> getMergedIntervals(List<TimeRange> intervals) {
     if (intervals.isEmpty()) {
@@ -151,9 +151,11 @@ public final class FindMeetingQuery {
    * Merges two interval lists into one given that each merged interval is greater than or equal to
    * the meeting duration.
    *
-   * @param intervalsA the first interval list to merge
-   * @param intervalsB the second interval list to merge
-   * @return merged list of valid intervals
+   * @param intervalsA the first interval list to merge - must have no overlapping intervals and be
+   *     sorted based in ascending order
+   * @param intervalsB the second interval list to merge - must have no overlapping intervals and be
+   *     sorted based in ascending order
+   * @return merged list of non-overlapping intervals sorted in ascending order
    */
   private static List<TimeRange> getMergedIntervals(
       List<TimeRange> intervalsA, List<TimeRange> intervalsB, MeetingRequest request) {
@@ -186,7 +188,7 @@ public final class FindMeetingQuery {
    * @param intervals list in which the new interval will be added
    * @param interval the interval that is checked for validation
    * @param request the meeting request with the minimum required duration
-   * @return new list of intervals with a new interval added if it was valid
+   * @return list of intervals with a new interval added if it was valid
    */
   private static List<TimeRange> addIntervalIfValid(
       List<TimeRange> intervals, TimeRange interval, MeetingRequest request) {
