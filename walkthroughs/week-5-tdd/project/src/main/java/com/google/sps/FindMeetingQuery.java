@@ -28,10 +28,9 @@ import java.util.Set;
 public final class FindMeetingQuery {
   /**
    * Finds the available times in a day in which all meeting participants can attend.
-   * The request can't have a duration longer than a day.
    *
    * @param events the events occurring in a single day
-   * @param request the meeting that needs to be accommodated
+   * @param request the meeting that needs to be accommodated - can't be longer than a day
    * @return list of all available meeting times within a single day
    */
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
