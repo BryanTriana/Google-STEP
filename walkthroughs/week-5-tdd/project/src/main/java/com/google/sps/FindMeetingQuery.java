@@ -28,24 +28,27 @@ import java.util.Set;
 public final class FindMeetingQuery {
   /**
    * Finds the available times in a day in which all meeting participants can attend.
+   * The request can't have a duration longer than a day.
    *
-   * @param events The events occurring in a single day
-   * @param request The meeting that needs to be accommodated
-   * @return List of all available meeting times within a single day
+   * @param events the events occurring in a single day
+   * @param request the meeting that needs to be accommodated
+   * @return list of all available meeting times within a single day
    */
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     if (request.getDuration() > TimeRange.WHOLE_DAY.duration()) {
       return Collections.emptyList();
     }
 
-    List<TimeRange> mandatoryIntervals = new ArrayList<>();
     List<TimeRange> optionalIntervals = new ArrayList<>();
-    Set<String> mandatoryAttendees = new HashSet<>(request.getAttendees());
     Set<String> optionalAttendees = new HashSet<>(request.getOptionalAttendees());
 
-    if (mandatoryAttendees.isEmpty()) {
+    List<TimeRange> mandatoryIntervals = new ArrayList<>();
+    Set<String> mandatoryAttendees;
+
+    if (request.getAttendees().isEmpty()) {
       mandatoryAttendees = new HashSet<>(optionalAttendees);
-      optionalAttendees.clear();
+    } else {
+      mandatoryAttendees = new HashSet<>(request.getAttendees());
     }
 
     for (Event event : events) {
@@ -82,15 +85,15 @@ public final class FindMeetingQuery {
    * Checks whether candidates in an event conflict with any of the candidates in the meeting
    * request.
    *
-   * @param eventAttendees The attendees participating in a certain event
-   * @param mandatoryAttendees The attendees requesting a meeting time
-   * @return True if an event attendee is not available for the meeting request, otherwise
+   * @param eventAttendees the attendees participating in a certain event
+   * @param requestedAttendees the attendees requested for a meeting
+   * @return true if an event attendee is not available for the meeting request, otherwise
    *     false
    */
   private static boolean eventConflictsWithRequest(
-      Set<String> eventAttendees, Set<String> mandatoryAttendees) {
+      Set<String> eventAttendees, Set<String> requestedAttendees) {
     for (String attendee : eventAttendees) {
-      if (mandatoryAttendees.contains(attendee)) {
+      if (requestedAttendees.contains(attendee)) {
         return true;
       }
     }
@@ -102,9 +105,9 @@ public final class FindMeetingQuery {
    * Finds the available intervals from a list of busy intervals by calculating for their
    * complement.
    *
-   * @param busyIntervals The list containing busy non-overlapping intervals
-   * @param request The meeting request used to validate the time interval
-   * @return A list containing the available intervals
+   * @param busyIntervals the list containing busy non-overlapping intervals
+   * @param request the meeting request used to validate the time interval
+   * @return a list containing the available intervals
    */
   private static List<TimeRange> getAvailableIntervals(
       List<TimeRange> busyIntervals, MeetingRequest request) {
@@ -115,17 +118,20 @@ public final class FindMeetingQuery {
       return availableIntervals;
     }
 
+    // Checks if there is free time between the start of the day and the first meeting.
     List<TimeRange> availableIntervals = addIntervalIfValid(new ArrayList<>(),
         TimeRange.fromStartEnd(TimeRange.START_OF_DAY, busyIntervals.get(0).start(), false),
         request);
 
-    for (int i = 0; i < busyIntervals.size() - 1; ++i) {
+    // Checks if there is free time between two consecutive meetings.
+    for (int i = 0; i < busyIntervals.size() - 1; i++) {
       availableIntervals = addIntervalIfValid(availableIntervals,
           TimeRange.fromStartEnd(
               busyIntervals.get(i).end(), busyIntervals.get(i + 1).start(), false),
           request);
     }
 
+    // Checks if there is free time between the last meeting and the end of the day.
     availableIntervals = addIntervalIfValid(availableIntervals,
         TimeRange.fromStartEnd(
             busyIntervals.get(busyIntervals.size() - 1).end(), TimeRange.END_OF_DAY + 1, false),
@@ -137,8 +143,8 @@ public final class FindMeetingQuery {
   /**
    * Merges the time intervals that are overlapping.
    *
-   * @param intervals Sorted list of intervals based on starting times in ascending order
-   * @return A new list with no overlapping intervals
+   * @param intervals sorted list of intervals based on starting times in ascending order
+   * @return new list with no overlapping intervals
    */
   private static List<TimeRange> getMergedIntervals(List<TimeRange> intervals) {
     if (intervals.isEmpty()) {
@@ -148,7 +154,7 @@ public final class FindMeetingQuery {
     List<TimeRange> mergedIntervals = new ArrayList<>();
     mergedIntervals.add(intervals.get(0));
 
-    for (int i = 1; i < intervals.size(); ++i) {
+    for (int i = 1; i < intervals.size(); i++) {
       TimeRange mergedInterval = mergedIntervals.get(mergedIntervals.size() - 1);
       TimeRange currInterval = intervals.get(i);
 
@@ -166,12 +172,12 @@ public final class FindMeetingQuery {
   }
 
   /**
-   * Merges two interval lists into one given that each interval is greater than or equal to the
-   * meeting duration.
+   * Merges two interval lists into one given that each merged interval is greater than or equal to
+   * the meeting duration.
    *
-   * @param intervalsA The first interval list to merge
-   * @param intervalsB The second interval list to merge
-   * @return The merged list of valid intervals
+   * @param intervalsA the first interval list to merge
+   * @param intervalsB the second interval list to merge
+   * @return merged list of valid intervals
    */
   private static List<TimeRange> getMergedIntervals(
       List<TimeRange> intervalsA, List<TimeRange> intervalsB, MeetingRequest request) {
@@ -188,9 +194,9 @@ public final class FindMeetingQuery {
       }
 
       if (intervalsA.get(i).end() < intervalsB.get(j).end()) {
-        ++i;
+        i++;
       } else {
-        ++j;
+        j++;
       }
     }
 
@@ -201,10 +207,10 @@ public final class FindMeetingQuery {
    * Appends an interval to the TimeRange list if its duration is greater than or equal to the
    * duration of the meeting request.
    *
-   * @param intervals List in which the new interval will be added
-   * @param interval The interval that is checked for validation
-   * @param request The meeting request with the minimum required duration
-   * @return A new list of intervals with a new interval added if it was valid
+   * @param intervals list in which the new interval will be added
+   * @param interval the interval that is checked for validation
+   * @param request the meeting request with the minimum required duration
+   * @return new list of intervals with a new interval added if it was valid
    */
   private static List<TimeRange> addIntervalIfValid(
       List<TimeRange> intervals, TimeRange interval, MeetingRequest request) {
