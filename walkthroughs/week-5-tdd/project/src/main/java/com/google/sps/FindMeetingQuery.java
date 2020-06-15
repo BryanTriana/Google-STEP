@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- *  Holds utility method 'query' to find the available times for a meeting
+ *  Holds utility method 'query' to find the available times for a meeting.
  */
 public final class FindMeetingQuery {
   /**
@@ -38,41 +38,24 @@ public final class FindMeetingQuery {
       return Collections.emptyList();
     }
 
-    List<TimeRange> optionalIntervals = new ArrayList<>();
-    Set<String> optionalAttendees = new HashSet<>(request.getOptionalAttendees());
+    List<TimeRange> availableOptionalIntervals =
+        getAvailableIntervals(events, request.getOptionalAttendees(), request.getDuration());
 
-    List<TimeRange> mandatoryIntervals = new ArrayList<>();
-    Set<String> mandatoryAttendees;
-
+    // Only need to search for optional intervals if there are no mandatory attendees.
     if (request.getAttendees().isEmpty()) {
-      mandatoryAttendees = new HashSet<>(optionalAttendees);
-    } else {
-      mandatoryAttendees = new HashSet<>(request.getAttendees());
+      return availableOptionalIntervals;
     }
-
-    for (Event event : events) {
-      if (!Collections.disjoint(event.getAttendees(), mandatoryAttendees)) {
-        mandatoryIntervals.add(event.getWhen());
-      }
-      if (!Collections.disjoint(event.getAttendees(), optionalAttendees)) {
-        optionalIntervals.add(event.getWhen());
-      }
-    }
-
-    Collections.sort(mandatoryIntervals, TimeRange.ORDER_BY_START);
-    Collections.sort(optionalIntervals, TimeRange.ORDER_BY_START);
-
-    List<TimeRange> mergedMandatoryIntervals = getMergedIntervals(mandatoryIntervals);
-    List<TimeRange> mergedOptionalIntervals = getMergedIntervals(optionalIntervals);
 
     List<TimeRange> availableMandatoryIntervals =
-        getAvailableIntervals(mergedMandatoryIntervals, request);
-    List<TimeRange> availableOptionalIntervals =
-        getAvailableIntervals(mergedOptionalIntervals, request);
+        getAvailableIntervals(events, request.getAttendees(), request.getDuration());
 
-    List<TimeRange> availableIntervals =
-        getMergedIntervals(availableMandatoryIntervals, availableOptionalIntervals, request);
+    List<TimeRange> availableIntervals = getMergedIntervals(
+        availableMandatoryIntervals, availableOptionalIntervals, request.getDuration());
 
+    /*
+     * If there is no interval intersection between mandatory and optional attendees then only
+     * mandatory intervals are relevant.
+     */
     if (availableIntervals.isEmpty()) {
       return availableMandatoryIntervals;
     }
@@ -81,37 +64,61 @@ public final class FindMeetingQuery {
   }
 
   /**
-   * Finds the available intervals from a list of busy intervals by calculating for their
-   * complement.
+   * Finds the meeting times that have no conflict between the attendees and the scheduled events.
    *
-   * @param busyIntervals list containing busy non-overlapping intervals sorted in ascending order
-   * @param request the meeting request used to validate the time interval
-   * @return list containing the available intervals in ascending order
+   * @param events list of events occurring in one day
+   * @param attendees list of unique attendees required in the meeting
+   * @param meetingDuration the minimum meeting duration
+   * @return list with all non-overlapping available times for the meeting sorted in ascending order
    */
   private static List<TimeRange> getAvailableIntervals(
-      List<TimeRange> busyIntervals, MeetingRequest request) {
+      Collection<Event> events, Collection<String> attendees, Long meetingDuration) {
+    List<TimeRange> busyIntervals = new ArrayList<>();
+
+    for (Event event : events) {
+      if (!Collections.disjoint(event.getAttendees(), attendees)) {
+        busyIntervals.add(event.getWhen());
+      }
+    }
+
     if (busyIntervals.isEmpty()) {
       return Arrays.asList(TimeRange.WHOLE_DAY);
     }
 
-    // Checks if there is free time between the start of the day and the first meeting.
-    List<TimeRange> availableIntervals = addIntervalIfValid(new ArrayList<>(),
-        TimeRange.fromStartEnd(TimeRange.START_OF_DAY, busyIntervals.get(0).start(), false),
-        request);
+    Collections.sort(busyIntervals, TimeRange.ORDER_BY_START);
 
-    // Checks if there is free time between two consecutive meetings.
+    busyIntervals = getMergedIntervals(busyIntervals);
+
+    // Add boundary at the start of the day.
+    busyIntervals.add(0, TimeRange.fromStartDuration(TimeRange.START_OF_DAY, 0));
+
+    // Add boundary at the end of the day.
+    busyIntervals.add(TimeRange.fromStartDuration(TimeRange.END_OF_DAY + 1, 0));
+
+    return getAvailableIntervals(getMergedIntervals(busyIntervals), meetingDuration);
+  }
+
+  /**
+   * Finds the available intervals from a list of busy intervals by calculating for their
+   * complement.
+   *
+   * @param busyIntervals list containing busy non-overlapping intervals sorted in ascending order
+   * @param meetingDuration the minimum meeting duration
+   * @return list containing the available intervals in ascending order
+   */
+  private static List<TimeRange> getAvailableIntervals(
+      List<TimeRange> busyIntervals, Long meetingDuration) {
+    List<TimeRange> availableIntervals = new ArrayList<>();
+
+    // Checks if there is free time between two consecutive intervals.
     for (int i = 0; i < busyIntervals.size() - 1; i++) {
-      availableIntervals = addIntervalIfValid(availableIntervals,
-          TimeRange.fromStartEnd(
-              busyIntervals.get(i).end(), busyIntervals.get(i + 1).start(), false),
-          request);
-    }
+      TimeRange interval = TimeRange.fromStartEnd(
+          busyIntervals.get(i).end(), busyIntervals.get(i + 1).start(), false);
 
-    // Checks if there is free time between the last meeting and the end of the day.
-    availableIntervals = addIntervalIfValid(availableIntervals,
-        TimeRange.fromStartEnd(
-            busyIntervals.get(busyIntervals.size() - 1).end(), TimeRange.END_OF_DAY + 1, false),
-        request);
+      if (interval.duration() >= meetingDuration) {
+        availableIntervals.add(interval);
+      }
+    }
 
     return availableIntervals;
   }
@@ -155,10 +162,11 @@ public final class FindMeetingQuery {
    *     sorted based in ascending order
    * @param intervalsB the second interval list to merge - must have no overlapping intervals and be
    *     sorted based in ascending order
+   * @param meetingDuration the minimum meeting duration
    * @return merged list of non-overlapping intervals sorted in ascending order
    */
   private static List<TimeRange> getMergedIntervals(
-      List<TimeRange> intervalsA, List<TimeRange> intervalsB, MeetingRequest request) {
+      List<TimeRange> intervalsA, List<TimeRange> intervalsB, Long meetingDuration) {
     List<TimeRange> mergedIntervals = new ArrayList<>();
 
     int i = 0, j = 0;
@@ -167,7 +175,7 @@ public final class FindMeetingQuery {
       int start = Math.max(intervalsA.get(i).start(), intervalsB.get(j).start());
       int end = Math.min(intervalsA.get(i).end(), intervalsB.get(j).end());
 
-      if (end - start >= request.getDuration()) {
+      if (end - start >= meetingDuration) {
         mergedIntervals.add(TimeRange.fromStartEnd(start, end, false));
       }
 
@@ -179,25 +187,5 @@ public final class FindMeetingQuery {
     }
 
     return mergedIntervals;
-  }
-
-  /**
-   * Appends an interval to the TimeRange list if its duration is greater than or equal to the
-   * duration of the meeting request.
-   *
-   * @param intervals list in which the new interval will be added
-   * @param interval the interval that is checked for validation
-   * @param request the meeting request with the minimum required duration
-   * @return list of intervals with a new interval added if it was valid
-   */
-  private static List<TimeRange> addIntervalIfValid(
-      List<TimeRange> intervals, TimeRange interval, MeetingRequest request) {
-    List<TimeRange> newIntervals = new ArrayList<>(intervals);
-
-    if (interval.duration() >= request.getDuration()) {
-      newIntervals.add(interval);
-    }
-
-    return newIntervals;
   }
 }
