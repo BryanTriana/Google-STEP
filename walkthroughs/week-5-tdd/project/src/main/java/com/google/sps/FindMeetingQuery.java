@@ -15,9 +15,9 @@
 package com.google.sps;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -51,10 +51,10 @@ public final class FindMeetingQuery {
     }
 
     for (Event event : events) {
-      if (eventConflictsWithRequest(event.getAttendees(), mandatoryAttendees)) {
+      if (!Collections.disjoint(event.getAttendees(), mandatoryAttendees)) {
         mandatoryIntervals.add(event.getWhen());
       }
-      if (eventConflictsWithRequest(event.getAttendees(), optionalAttendees)) {
+      if (!Collections.disjoint(event.getAttendees(), optionalAttendees)) {
         optionalIntervals.add(event.getWhen());
       }
     }
@@ -81,26 +81,6 @@ public final class FindMeetingQuery {
   }
 
   /**
-   * Checks whether candidates in an event conflict with any of the candidates in the meeting
-   * request.
-   *
-   * @param eventAttendees the attendees participating in a certain event
-   * @param requestedAttendees the attendees requested for a meeting
-   * @return true if an event attendee is not available for the meeting request, otherwise
-   *     false
-   */
-  private static boolean eventConflictsWithRequest(
-      Set<String> eventAttendees, Set<String> requestedAttendees) {
-    for (String attendee : eventAttendees) {
-      if (requestedAttendees.contains(attendee)) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  /**
    * Finds the available intervals from a list of busy intervals by calculating for their
    * complement.
    *
@@ -111,10 +91,7 @@ public final class FindMeetingQuery {
   private static List<TimeRange> getAvailableIntervals(
       List<TimeRange> busyIntervals, MeetingRequest request) {
     if (busyIntervals.isEmpty()) {
-      List<TimeRange> availableIntervals = new ArrayList<>();
-      availableIntervals.add(TimeRange.WHOLE_DAY);
-
-      return availableIntervals;
+      return Arrays.asList(TimeRange.WHOLE_DAY);
     }
 
     // Checks if there is free time between the start of the day and the first meeting.
