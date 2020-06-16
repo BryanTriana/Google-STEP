@@ -18,9 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  *  Holds utility method 'query' to find the available times for a meeting.
@@ -90,10 +88,10 @@ public final class FindMeetingQuery {
     busyIntervals = getMergedIntervals(busyIntervals);
 
     // Add boundary at the start of the day.
-    busyIntervals.add(0, TimeRange.fromStartDuration(TimeRange.START_OF_DAY, 0));
+    busyIntervals.add(0, TimeRange.fromStartDuration(TimeRange.START_OF_DAY, /* duration= */ 0));
 
     // Add boundary at the end of the day.
-    busyIntervals.add(TimeRange.fromStartDuration(TimeRange.END_OF_DAY + 1, 0));
+    busyIntervals.add(TimeRange.fromStartDuration(TimeRange.END_OF_DAY + 1, /* duration= */ 0));
 
     return getAvailableIntervals(getMergedIntervals(busyIntervals), meetingDurationMinutes);
   }
@@ -113,7 +111,7 @@ public final class FindMeetingQuery {
     // Checks if there is free time between two consecutive intervals.
     for (int i = 0; i < busyIntervals.size() - 1; i++) {
       TimeRange interval = TimeRange.fromStartEnd(
-          busyIntervals.get(i).end(), busyIntervals.get(i + 1).start(), false);
+          busyIntervals.get(i).end(), busyIntervals.get(i + 1).start(), /* inclusive= */ false);
 
       if (interval.duration() >= meetingDurationMinutes) {
         availableIntervals.add(interval);
@@ -144,7 +142,8 @@ public final class FindMeetingQuery {
       if (mergedInterval.end() < currInterval.start()) {
         mergedIntervals.add(currInterval);
       } else if (mergedInterval.end() < currInterval.end()) {
-        mergedInterval = TimeRange.fromStartEnd(mergedInterval.start(), currInterval.end(), false);
+        mergedInterval = TimeRange.fromStartEnd(
+            mergedInterval.start(), currInterval.end(), /* inclusive= */ false);
 
         mergedIntervals.remove(mergedIntervals.size() - 1);
         mergedIntervals.add(mergedInterval);
@@ -176,7 +175,7 @@ public final class FindMeetingQuery {
       int end = Math.min(intervalsA.get(i).end(), intervalsB.get(j).end());
 
       if (end - start >= meetingDurationMinutes) {
-        mergedIntervals.add(TimeRange.fromStartEnd(start, end, false));
+        mergedIntervals.add(TimeRange.fromStartEnd(start, end, /* inclusive= */ false));
       }
 
       if (intervalsA.get(i).end() < intervalsB.get(j).end()) {
